@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from 'react-native';
-import { Bell, ArrowUpRight, DollarSign, Calendar, MessageSquare, Briefcase, Plus } from 'lucide-react-native';
+import { Bell, ArrowUpRight, DollarSign, Calendar, MessageSquare, Briefcase, Plus, Clock, Compass } from 'lucide-react-native';
 import Svg, { Path, Circle, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 import { ScreenName } from '../types';
@@ -167,6 +167,77 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
             </Svg>
           </View>
         </View>
+
+        {/* Utilisation ! Card */}
+        <View style={styles.utilisationCard}>
+          <View style={styles.circularProgressContainer}>
+            <Svg width={46} height={46} viewBox="0 0 46 46">
+              {/* Background circle */}
+              <Circle
+                cx="23"
+                cy="23"
+                r="18"
+                fill="none"
+                stroke={Colors.borderLight}
+                strokeWidth="4"
+              />
+              {/* Foreground circle (33%) */}
+              <Circle
+                cx="23"
+                cy="23"
+                r="18"
+                fill="none"
+                stroke={Colors.success}
+                strokeWidth="4"
+                strokeDasharray="113.1"
+                strokeDashoffset="75.8"
+                strokeLinecap="round"
+                transform="rotate(-90 23 23)"
+              />
+            </Svg>
+            <View style={styles.progressTextWrapper}>
+              <Text style={styles.progressText}>33%</Text>
+            </View>
+          </View>
+          <View style={styles.utilisationTexts}>
+            <Text style={styles.utilisationTitle}>Utilisation !</Text>
+            <Text style={styles.utilisationSubtitle}>
+              Keeping credit utilization below 40% is Good for your score
+            </Text>
+          </View>
+        </View>
+
+        {/* Credit Factors Section */}
+        <View style={styles.factorsSection}>
+          <Text style={styles.factorsTitle}>Credit Factors</Text>
+          <Text style={styles.factorsSubtitle}>Factors that effects your CIBIL Score</Text>
+
+          {/* Factor 1: Payment History */}
+          <View style={styles.factorCard}>
+            <View style={[styles.factorIconContainer, { backgroundColor: '#FFF7ED' }]}>
+              <Clock size={20} color="#F97316" />
+            </View>
+            <View style={styles.factorTexts}>
+              <Text style={styles.factorName}>Payment History</Text>
+              <Text style={styles.factorDescription}>
+                Timely EMI and bill payments improve your score. Missed or late payments can lower it quickly.
+              </Text>
+            </View>
+          </View>
+
+          {/* Factor 2: Credit Utilisation */}
+          <View style={styles.factorCard}>
+            <View style={[styles.factorIconContainer, { backgroundColor: '#EFF6FF' }]}>
+              <Compass size={20} color="#2563EB" />
+            </View>
+            <View style={styles.factorTexts}>
+              <Text style={styles.factorName}>Credit Utilisation</Text>
+              <Text style={styles.factorDescription}>
+                Using over 30% of your credit limit shows...
+              </Text>
+            </View>
+          </View>
+        </View>
       </ScrollView>
 
       {/* Floating Action Button */}
@@ -187,7 +258,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
   },
   scrollContent: {
-    paddingBottom: 100,
+    paddingBottom: 140,
   },
   header: {
     flexDirection: 'row',
@@ -361,5 +432,94 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     ...Shadows.blueStrong,
+  },
+  utilisationCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.xl,
+    marginHorizontal: 24,
+    padding: 18,
+    marginTop: 20,
+    ...Shadows.md,
+  },
+  circularProgressContainer: {
+    width: 46,
+    height: 46,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  progressTextWrapper: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  progressText: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  utilisationTexts: {
+    flex: 1,
+  },
+  utilisationTitle: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    marginBottom: 4,
+  },
+  utilisationSubtitle: {
+    fontSize: 11,
+    color: Colors.textSubtle,
+    lineHeight: 15,
+    fontWeight: '600',
+  },
+  factorsSection: {
+    marginHorizontal: 24,
+    marginTop: 24,
+  },
+  factorsTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+  },
+  factorsSubtitle: {
+    fontSize: 12,
+    color: Colors.textSubtle,
+    marginTop: 2,
+    marginBottom: 12,
+    fontWeight: '600',
+  },
+  factorCard: {
+    flexDirection: 'row',
+    backgroundColor: Colors.surface,
+    borderRadius: BorderRadius.xl,
+    padding: 16,
+    marginBottom: 12,
+    ...Shadows.sm,
+  },
+  factorIconContainer: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 14,
+  },
+  factorTexts: {
+    flex: 1,
+  },
+  factorName: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Colors.textPrimary,
+    marginBottom: 4,
+  },
+  factorDescription: {
+    fontSize: 11,
+    color: Colors.textSubtle,
+    lineHeight: 15,
+    fontWeight: '600',
   },
 });

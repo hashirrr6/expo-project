@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Switch, Dimensions, Image } from 'react-native';
-import { ChevronLeft, ChevronRight, Mail, Smartphone, Calendar, Fingerprint, Moon, Bell, Scan } from 'lucide-react-native';
+import { ChevronLeft, ChevronRight, Mail, Smartphone, Calendar, Fingerprint, Moon, Bell, Smile } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 import { ScreenName } from '../types';
 import BottomTabBar from '../components/BottomTabBar';
@@ -29,7 +29,12 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
   const [faceId, setFaceId] = useState(false);
   const [fingerprint, setFingerprint] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
-  const [notifications, setNotifications] = useState(true);
+  
+  // Notification states matching the mockup
+  const [pushNotifications, setPushNotifications] = useState(false);
+  const [paymentReminders, setPaymentReminders] = useState(false);
+  const [emailNotifications, setEmailNotifications] = useState(false);
+  const [smsNotifications, setSmsNotifications] = useState(false);
 
   const switchTrackColors = { false: Colors.border, true: Colors.primaryLight };
 
@@ -93,16 +98,12 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
             </View>
           </View>
 
-          {/* Security Section */}
-          <View style={styles.groupHeaderContainer}>
-            <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Security</Text>
-          </View>
-
+          {/* Face ID & Fingerprint Rows (No Security header as per mockup) */}
           <View style={styles.settingsSection}>
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
-                  <Scan size={18} color={Colors.primaryLight} />
+                  <Smile size={18} color={Colors.primaryLight} />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Face ID</Text>
@@ -161,12 +162,13 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
             </View>
           </View>
 
-          {/* Notifications Section */}
+          {/* Notifications Section - 4 switches matching mockup */}
           <View style={styles.groupHeaderContainer}>
             <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Notifications</Text>
           </View>
 
           <View style={styles.settingsSection}>
+            {/* 1. Push Notifications */}
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
@@ -174,16 +176,78 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Push Notifications</Text>
-                  <Text style={styles.settingSubtitle}>Receive instant push updates</Text>
+                  <Text style={styles.settingSubtitle}>Receive push notifications</Text>
                 </View>
               </View>
               <Switch
-                value={notifications}
-                onValueChange={setNotifications}
+                value={pushNotifications}
+                onValueChange={setPushNotifications}
                 trackColor={switchTrackColors}
                 thumbColor={Colors.white}
               />
             </View>
+
+            {/* 2. Payments Reminders */}
+            <View style={styles.settingRow}>
+              <View style={styles.rowLeft}>
+                <View style={styles.iconContainer}>
+                  <Bell size={18} color={Colors.primaryLight} />
+                </View>
+                <View style={styles.settingTexts}>
+                  <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Payments Reminders</Text>
+                  <Text style={styles.settingSubtitle}>Receive payment reminders</Text>
+                </View>
+              </View>
+              <Switch
+                value={paymentReminders}
+                onValueChange={setPaymentReminders}
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
+              />
+            </View>
+
+            {/* 3. Email Notifications */}
+            <View style={styles.settingRow}>
+              <View style={styles.rowLeft}>
+                <View style={styles.iconContainer}>
+                  <Bell size={18} color={Colors.primaryLight} />
+                </View>
+                <View style={styles.settingTexts}>
+                  <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Email Notifications</Text>
+                  <Text style={styles.settingSubtitle}>Get Important updates via email</Text>
+                </View>
+              </View>
+              <Switch
+                value={emailNotifications}
+                onValueChange={setEmailNotifications}
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
+              />
+            </View>
+
+            {/* 4. SMS Notifications */}
+            <View style={styles.settingRow}>
+              <View style={styles.rowLeft}>
+                <View style={styles.iconContainer}>
+                  <Bell size={18} color={Colors.primaryLight} />
+                </View>
+                <View style={styles.settingTexts}>
+                  <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>SMS Notifications</Text>
+                  <Text style={styles.settingSubtitle}>Receive text messages alerts</Text>
+                </View>
+              </View>
+              <Switch
+                value={smsNotifications}
+                onValueChange={setSmsNotifications}
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
+              />
+            </View>
+          </View>
+
+          {/* Danger Zone Section */}
+          <View style={styles.groupHeaderContainer}>
+            <Text style={[styles.groupHeaderTitle, styles.groupHeaderTitleRed]}>Danger Zone</Text>
           </View>
 
           {/* Logout Button */}
@@ -321,14 +385,16 @@ const styles = StyleSheet.create({
   groupHeaderContainer: {
     marginTop: 24,
     marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.borderLight,
-    paddingBottom: 6,
   },
   groupHeaderTitle: {
     fontSize: 16,
     fontWeight: '900',
     color: Colors.textSecondary,
+  },
+  groupHeaderTitleRed: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: '#FF4D4C',
   },
   settingsSection: {
     marginBottom: 8,

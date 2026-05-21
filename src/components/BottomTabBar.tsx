@@ -17,11 +17,12 @@ interface TabConfig {
   screen: ScreenName | null;
 }
 
+// Swapped to match the mockup: Home, Chat, History, Card, Profile
 const TABS: TabConfig[] = [
   { key: 'Home', label: 'Home', icon: Home, screen: 'Home' },
-  { key: 'Card', label: 'Card', icon: CreditCard, screen: null },
-  { key: 'History', label: 'History', icon: Clock, screen: null },
   { key: 'Messages', label: 'Chat', icon: MessageCircle, screen: 'Messages' },
+  { key: 'History', label: 'History', icon: Clock, screen: null },
+  { key: 'Card', label: 'Card', icon: CreditCard, screen: null },
   { key: 'Profile', label: 'Profile', icon: User, screen: 'Profile' },
 ];
 
@@ -46,7 +47,10 @@ export default function BottomTabBar({ activeTab, onNavigate, darkMode = false }
               ]}>
                 <Image
                   source={require('../../assets/avatar.png')}
-                  style={styles.miniAvatar}
+                  style={[
+                    styles.miniAvatar,
+                    isActive && styles.miniAvatarActiveImage
+                  ]}
                   resizeMode="cover"
                 />
               </View>
@@ -56,15 +60,18 @@ export default function BottomTabBar({ activeTab, onNavigate, darkMode = false }
                 color={isActive ? Colors.primary : Colors.textPlaceholder}
               />
             )}
-            <Text
-              style={[
-                styles.label,
-                isActive && styles.labelActive,
-                darkMode && !isActive && styles.labelDark,
-              ]}
-            >
-              {tab.label}
-            </Text>
+            {/* Show label ONLY if active and not Profile */}
+            {isActive && tab.key !== 'Profile' && (
+              <Text
+                style={[
+                  styles.label,
+                  styles.labelActive,
+                  darkMode && styles.labelDarkActive,
+                ]}
+              >
+                {tab.label}
+              </Text>
+            )}
           </TouchableOpacity>
         );
       })}
@@ -95,6 +102,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 4,
+    minWidth: 50,
   },
   label: {
     fontSize: 10,
@@ -106,25 +114,32 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     fontWeight: '900',
   },
-  labelDark: {
-    color: Colors.textSubtle,
+  labelDarkActive: {
+    color: Colors.primaryLighter,
   },
   miniAvatarContainer: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    overflow: 'hidden',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+  },
+  miniAvatarActive: {
+    backgroundColor: Colors.primary,
+    padding: 3,
+  },
+  miniAvatar: {
     width: 24,
     height: 24,
     borderRadius: 12,
-    overflow: 'hidden',
+  },
+  miniAvatarActiveImage: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     borderWidth: 1.5,
-    borderColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  miniAvatarActive: {
-    borderColor: Colors.primary,
-  },
-  miniAvatar: {
-    width: 22,
-    height: 22,
-    borderRadius: 11,
+    borderColor: Colors.white,
   },
 });

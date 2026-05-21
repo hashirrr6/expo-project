@@ -10,7 +10,7 @@ import {
   Platform,
   ScrollView,
 } from 'react-native';
-import { ShieldCheck, Mail, User } from 'lucide-react-native';
+import { Fingerprint } from 'lucide-react-native';
 import Svg, { Path } from 'react-native-svg';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 
@@ -42,7 +42,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
-  const [keepLoggedIn, setKeepLoggedIn] = useState(true);
+  const [keepLoggedIn, setKeepLoggedIn] = useState(false);
 
   return (
     <KeyboardAvoidingView
@@ -77,10 +77,9 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             First Name <Text style={styles.required}>*</Text>
           </Text>
           <View style={styles.inputFieldContainer}>
-            <User size={18} color={Colors.textPlaceholder} style={styles.iconPrefix} />
             <TextInput
               style={styles.inputField}
-              placeholder="Enter First Name"
+              placeholder="Enter Your First Name"
               placeholderTextColor={Colors.textPlaceholder}
               value={firstName}
               onChangeText={setFirstName}
@@ -91,10 +90,9 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             Last Name <Text style={styles.required}>*</Text>
           </Text>
           <View style={styles.inputFieldContainer}>
-            <User size={18} color={Colors.textPlaceholder} style={styles.iconPrefix} />
             <TextInput
               style={styles.inputField}
-              placeholder="Enter Last Name"
+              placeholder="Enter Your Last Name"
               placeholderTextColor={Colors.textPlaceholder}
               value={lastName}
               onChangeText={setLastName}
@@ -105,7 +103,6 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
             Email Address <Text style={styles.required}>*</Text>
           </Text>
           <View style={styles.inputFieldContainer}>
-            <Mail size={18} color={Colors.textPlaceholder} style={styles.iconPrefix} />
             <TextInput
               style={styles.inputField}
               placeholder="Enter Your Email"
@@ -119,7 +116,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
           {/* Biometric Integration Link */}
           <TouchableOpacity style={styles.biometricLink} activeOpacity={0.7}>
-            <ShieldCheck size={18} color={Colors.primaryLight} />
+            <Fingerprint size={18} color={Colors.primaryLight} style={{ marginRight: 6 }} />
             <Text style={styles.biometricLinkText}>Use Biometric Login</Text>
           </TouchableOpacity>
         </View>

@@ -1,12 +1,28 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, Switch, Dimensions } from 'react-native';
-import { ChevronLeft, ChevronRight, Mail, Smartphone, Smile, Fingerprint, Moon, Bell } from 'lucide-react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Switch, Dimensions, Image } from 'react-native';
+import { ChevronLeft, ChevronRight, Mail, Smartphone, Calendar, Fingerprint, Moon, Bell, Scan } from 'lucide-react-native';
+import { Colors, Shadows, BorderRadius } from '../constants/theme';
+import { ScreenName } from '../types';
+import BottomTabBar from '../components/BottomTabBar';
 
-const { width, height } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 interface ProfileScreenProps {
   onBack: () => void;
-  onNavigate: (screen: 'Onboarding' | 'Login' | 'Home' | 'Messages' | 'Profile') => void;
+  onNavigate: (screen: ScreenName) => void;
+}
+
+/** Avatar using the generated 3D image */
+function AvatarImage() {
+  return (
+    <View style={styles.avatarRing}>
+      <Image
+        source={require('../../assets/avatar.png')}
+        style={styles.avatarImage}
+        resizeMode="cover"
+      />
+    </View>
+  );
 }
 
 export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps) {
@@ -15,85 +31,78 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
   const [darkMode, setDarkMode] = useState(false);
   const [notifications, setNotifications] = useState(true);
 
+  const switchTrackColors = { false: Colors.border, true: Colors.primaryLight };
+
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
-      {/* IOS-style Header exactly matching the design */}
+      {/* Header */}
       <View style={[styles.header, darkMode && styles.headerDark]}>
         <TouchableOpacity style={styles.headerBtn} onPress={onBack} activeOpacity={0.7}>
-          <ChevronLeft size={20} color={darkMode ? '#FFFFFF' : '#1E293B'} />
+          <ChevronLeft size={20} color={darkMode ? Colors.white : Colors.textSecondary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, darkMode && styles.textWhite]}>Profile</Text>
-        <TouchableOpacity style={styles.headerBtn} onPress={() => {}} activeOpacity={0.7}>
-          <ChevronRight size={20} color={darkMode ? '#FFFFFF' : '#1E293B'} />
+        <TouchableOpacity style={styles.headerBtn} activeOpacity={0.7}>
+          <ChevronRight size={20} color={darkMode ? Colors.white : Colors.textSecondary} />
         </TouchableOpacity>
       </View>
 
-      <ScrollView 
-        contentContainerStyle={styles.scrollContainer} 
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Main Body Container with White Card Layout & Curved Corners */}
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
         <View style={[styles.profileCard, darkMode && styles.profileCardDark]}>
-          
-          {/* Avatar Area with Blue Ring */}
+          {/* Avatar */}
           <View style={styles.avatarWrapper}>
-            <View style={styles.avatarRing}>
-              <Image
-                source={{ uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300' }} 
-                style={styles.avatarImage}
-                defaultSource={{ uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=300' }}
-              />
-            </View>
+            <AvatarImage />
             <Text style={[styles.userName, darkMode && styles.textWhite]}>Sarah Joe</Text>
           </View>
 
-          {/* Info Rows exactly styled like the screenshot */}
+          {/* Info Rows */}
           <View style={styles.infoSection}>
-            {/* Email Row */}
             <View style={styles.infoRow}>
               <View style={styles.iconContainer}>
-                <Mail size={18} color="#3B82F6" />
+                <Mail size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>EMAIL</Text>
-                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>Sample@example.com</Text>
+                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
+                  Sample@example.com
+                </Text>
               </View>
             </View>
 
-            {/* Phone Row */}
             <View style={styles.infoRow}>
               <View style={styles.iconContainer}>
-                <Smartphone size={18} color="#3B82F6" />
+                <Smartphone size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>PHONE</Text>
-                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>(988) 000- 8888</Text>
+                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
+                  (988) 000- 8888
+                </Text>
               </View>
             </View>
 
-            {/* DOB Row (Specifically uses Envelope/Mail icon as in design) */}
             <View style={styles.infoRow}>
               <View style={styles.iconContainer}>
-                <Mail size={18} color="#3B82F6" />
+                <Calendar size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>DOB</Text>
-                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>Sample@example.com</Text>
+                <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
+                  12/10/1994
+                </Text>
               </View>
             </View>
           </View>
 
-          {/* Security Group */}
+          {/* Security Section */}
           <View style={styles.groupHeaderContainer}>
             <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Security</Text>
           </View>
 
           <View style={styles.settingsSection}>
-            {/* Face ID Switch Row */}
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
-                  <Smile size={18} color="#3B82F6" />
+                  <Scan size={18} color={Colors.primaryLight} />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Face ID</Text>
@@ -103,16 +112,15 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <Switch
                 value={faceId}
                 onValueChange={setFaceId}
-                trackColor={{ false: '#E2E8F0', true: '#3B82F6' }}
-                thumbColor="#FFFFFF"
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
               />
             </View>
 
-            {/* Fingerprint Switch Row */}
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
-                  <Fingerprint size={18} color="#3B82F6" />
+                  <Fingerprint size={18} color={Colors.primaryLight} />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Fingerprint</Text>
@@ -122,23 +130,22 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <Switch
                 value={fingerprint}
                 onValueChange={setFingerprint}
-                trackColor={{ false: '#E2E8F0', true: '#3B82F6' }}
-                thumbColor="#FFFFFF"
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
               />
             </View>
           </View>
 
-          {/* Appearance Group */}
+          {/* Appearance Section */}
           <View style={styles.groupHeaderContainer}>
             <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Appearance</Text>
           </View>
 
           <View style={styles.settingsSection}>
-            {/* Dark Mode Switch Row */}
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
-                  <Moon size={18} color="#3B82F6" />
+                  <Moon size={18} color={Colors.primaryLight} />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Dark Mode</Text>
@@ -148,23 +155,22 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <Switch
                 value={darkMode}
                 onValueChange={setDarkMode}
-                trackColor={{ false: '#E2E8F0', true: '#3B82F6' }}
-                thumbColor="#FFFFFF"
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
               />
             </View>
           </View>
 
-          {/* Notifications Group */}
+          {/* Notifications Section */}
           <View style={styles.groupHeaderContainer}>
             <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Notifications</Text>
           </View>
 
           <View style={styles.settingsSection}>
-            {/* Push Notifications Row */}
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
                 <View style={styles.iconContainer}>
-                  <Bell size={18} color="#3B82F6" />
+                  <Bell size={18} color={Colors.primaryLight} />
                 </View>
                 <View style={styles.settingTexts}>
                   <Text style={[styles.settingTitle, darkMode && styles.textWhite]}>Push Notifications</Text>
@@ -174,39 +180,21 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <Switch
                 value={notifications}
                 onValueChange={setNotifications}
-                trackColor={{ false: '#E2E8F0', true: '#3B82F6' }}
-                thumbColor="#FFFFFF"
+                trackColor={switchTrackColors}
+                thumbColor={Colors.white}
               />
             </View>
           </View>
 
-          {/* Sign Out CTA Button */}
+          {/* Logout Button */}
           <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.8} onPress={onBack}>
             <Text style={styles.logoutBtnText}>Log Out</Text>
           </TouchableOpacity>
-
         </View>
       </ScrollView>
 
-      {/* Styled Bottom Tab Nav Panel matching exactly */}
-      <View style={[styles.tabBar, darkMode && styles.tabBarDark]}>
-        <TouchableOpacity style={styles.tabItem} onPress={() => onNavigate('Home')}>
-          <Text style={styles.tabIconPlaceholder}>🏠</Text>
-          <Text style={styles.tabLabel}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => onNavigate('Messages')}>
-          <Text style={styles.tabIconPlaceholder}>💬</Text>
-          <Text style={styles.tabLabel}>Chat</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => {}}>
-          <Text style={styles.tabIconPlaceholder}>🕒</Text>
-          <Text style={styles.tabLabel}>History</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.tabItem} onPress={() => onNavigate('Profile')}>
-          <Text style={[styles.tabIconPlaceholder, styles.tabSelectedText]}>👤</Text>
-          <Text style={[styles.tabLabel, styles.tabLabelSelected]}>Profile</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Bottom Tab Bar */}
+      <BottomTabBar activeTab="Profile" onNavigate={onNavigate} darkMode={darkMode} />
     </View>
   );
 }
@@ -214,11 +202,11 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#EBF2FC',
+    backgroundColor: Colors.background,
     paddingTop: 10,
   },
   containerDark: {
-    backgroundColor: '#0f172a',
+    backgroundColor: Colors.darkBg,
   },
   header: {
     flexDirection: 'row',
@@ -229,47 +217,43 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   headerDark: {
-    backgroundColor: '#0f172a',
+    backgroundColor: Colors.darkBg,
   },
   headerBtn: {
     width: 38,
     height: 38,
-    borderRadius: 12,
-    backgroundColor: '#FFFFFF',
+    borderRadius: BorderRadius.md,
+    backgroundColor: Colors.surface,
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#101828',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+    ...Shadows.sm,
   },
   headerTitle: {
     fontSize: 18,
     fontWeight: '900',
-    color: '#0F172A',
+    color: Colors.textPrimary,
     letterSpacing: -0.2,
   },
   textWhite: {
-    color: '#FFFFFF',
+    color: Colors.white,
   },
   textLightGray: {
-    color: '#94A3B8',
+    color: Colors.textPlaceholder,
   },
   scrollContainer: {
     paddingBottom: 90,
   },
   profileCard: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 34,
-    borderTopRightRadius: 34,
+    backgroundColor: Colors.surface,
+    borderTopLeftRadius: BorderRadius['2xl'],
+    borderTopRightRadius: BorderRadius['2xl'],
     paddingTop: 24,
     paddingHorizontal: 24,
     minHeight: height - 150,
   },
   profileCardDark: {
-    backgroundColor: '#1e293b',
+    backgroundColor: Colors.darkSurface,
   },
   avatarWrapper: {
     alignItems: 'center',
@@ -281,11 +265,12 @@ const styles = StyleSheet.create({
     height: 120,
     borderRadius: 60,
     borderWidth: 4,
-    borderColor: '#3B82F6',
+    borderColor: Colors.primaryLight,
     padding: 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#EBF2FC',
+    backgroundColor: Colors.background,
+    overflow: 'hidden',
   },
   avatarImage: {
     width: 108,
@@ -295,7 +280,7 @@ const styles = StyleSheet.create({
   userName: {
     fontSize: 22,
     fontWeight: '800',
-    color: '#1E293B',
+    color: Colors.textSecondary,
     marginTop: 12,
     letterSpacing: -0.5,
   },
@@ -307,13 +292,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: Colors.borderLight,
   },
   iconContainer: {
     width: 42,
     height: 42,
     borderRadius: 21,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: Colors.primaryLightest,
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 14,
@@ -324,26 +309,26 @@ const styles = StyleSheet.create({
   infoLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#94A3B8',
+    color: Colors.textPlaceholder,
     letterSpacing: 0.5,
   },
   infoValue: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#475569',
+    color: Colors.textMuted,
     marginTop: 2,
   },
   groupHeaderContainer: {
     marginTop: 24,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: Colors.borderLight,
     paddingBottom: 6,
   },
   groupHeaderTitle: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#1E293B',
+    color: Colors.textSecondary,
   },
   settingsSection: {
     marginBottom: 8,
@@ -365,68 +350,30 @@ const styles = StyleSheet.create({
   settingTitle: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#1E293B',
+    color: Colors.textSecondary,
   },
   settingSubtitle: {
     fontSize: 11,
-    color: '#94A3B8',
+    color: Colors.textPlaceholder,
     marginTop: 2,
   },
   logoutBtn: {
     width: '100%',
     backgroundColor: '#FF4D4C',
     height: 52,
-    borderRadius: 16,
+    borderRadius: BorderRadius.lg,
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 36,
-    shadowColor: '#EF4444',
+    shadowColor: Colors.error,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 2,
   },
   logoutBtnText: {
-    color: '#FFFFFF',
-    fontWeight: '950',
+    color: Colors.white,
+    fontWeight: '900',
     fontSize: 14,
-  },
-  tabBar: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 72,
-    borderTopWidth: 1,
-    borderColor: '#E2E8F0',
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    paddingBottom: 10,
-  },
-  tabBarDark: {
-    backgroundColor: '#1E293B',
-    borderColor: '#334155',
-  },
-  tabItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  tabIconPlaceholder: {
-    fontSize: 20,
-    color: '#94A3B8',
-  },
-  tabSelectedText: {
-    color: '#3B82F6',
-  },
-  tabLabel: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: '#94A3B8',
-    marginTop: 2,
-  },
-  tabLabelSelected: {
-    color: '#3B82F6',
   },
 });

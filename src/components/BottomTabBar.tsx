@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Home, CreditCard, Clock, MessageCircle, User } from 'lucide-react-native';
 import { Colors } from '../constants/theme';
 import { ScreenName, TabName } from '../types';
@@ -13,7 +13,7 @@ interface BottomTabBarProps {
 interface TabConfig {
   key: TabName;
   label: string;
-  icon: React.ComponentType<{ size: number; color: string }>;
+  icon: React.ComponentType<any>;
   screen: ScreenName | null;
 }
 
@@ -39,10 +39,23 @@ export default function BottomTabBar({ activeTab, onNavigate, darkMode = false }
             onPress={() => tab.screen && onNavigate(tab.screen)}
             activeOpacity={0.7}
           >
-            <IconComponent
-              size={22}
-              color={isActive ? Colors.primary : Colors.textPlaceholder}
-            />
+            {tab.key === 'Profile' ? (
+              <View style={[
+                styles.miniAvatarContainer,
+                isActive && styles.miniAvatarActive
+              ]}>
+                <Image
+                  source={require('../../assets/avatar.png')}
+                  style={styles.miniAvatar}
+                  resizeMode="cover"
+                />
+              </View>
+            ) : (
+              <IconComponent
+                size={22}
+                color={isActive ? Colors.primary : Colors.textPlaceholder}
+              />
+            )}
             <Text
               style={[
                 styles.label,
@@ -95,5 +108,23 @@ const styles = StyleSheet.create({
   },
   labelDark: {
     color: Colors.textSubtle,
+  },
+  miniAvatarContainer: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    overflow: 'hidden',
+    borderWidth: 1.5,
+    borderColor: 'transparent',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  miniAvatarActive: {
+    borderColor: Colors.primary,
+  },
+  miniAvatar: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
   },
 });

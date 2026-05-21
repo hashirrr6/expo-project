@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { View, SafeAreaView, StyleSheet, StatusBar } from 'react-native';
-import OnboardingScreen from './screens/OnboardingScreen';
-import LoginScreen from './screens/LoginScreen';
-import HomeScreen from './screens/HomeScreen';
-import MessagesScreen from './screens/MessagesScreen';
-import ProfileScreen from './screens/ProfileScreen';
+import OnboardingScreen from './src/screens/OnboardingScreen';
+import LoginScreen from './src/screens/LoginScreen';
+import HomeScreen from './src/screens/HomeScreen';
+import MessagesScreen from './src/screens/MessagesScreen';
+import ProfileScreen from './src/screens/ProfileScreen';
 
 export default function App() {
   const [currentScreen, setCurrentScreen] = useState<'Onboarding' | 'Login' | 'Home' | 'Messages' | 'Profile'>('Onboarding');

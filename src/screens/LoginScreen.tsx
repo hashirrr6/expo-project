@@ -9,29 +9,24 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
+  Image,
 } from 'react-native';
 import { Fingerprint } from 'lucide-react-native';
-import Svg, { Path } from 'react-native-svg';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 
 interface LoginScreenProps {
   onLogin: () => void;
 }
 
-/** KOJO brand logo with smile arc */
+/** KOJO brand logo using the loginpage-Logo asset */
 function KojoLogo() {
   return (
     <View style={styles.logoContainer}>
-      <Text style={styles.logoText}>KOJO</Text>
-      <Svg width={60} height={20} viewBox="0 0 60 20">
-        <Path
-          d="M 8 4 Q 30 22 52 4"
-          fill="none"
-          stroke={Colors.primary}
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
-      </Svg>
+      <Image
+        source={require('../../assets/loginpage-Logo.png')}
+        style={styles.logoImage}
+        resizeMode="contain"
+      />
       <Text style={styles.tagline}>Ally in Debt</Text>
     </View>
   );
@@ -161,13 +156,12 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     alignItems: 'center',
-    marginBottom: 32,
+    marginBottom: 24,
+    marginTop: 20,
   },
-  logoText: {
-    fontSize: 34,
-    fontWeight: '900',
-    color: Colors.primary,
-    letterSpacing: 2,
+  logoImage: {
+    width: 140,
+    height: 70,
   },
   tagline: {
     fontSize: 14,

@@ -66,7 +66,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
                 <Mail size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>EMAIL</Text>
+                <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>Email</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
                   Sample@example.com
                 </Text>
@@ -78,7 +78,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
                 <Smartphone size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>PHONE</Text>
+                <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>Phone</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
                   (988) 000- 8888
                 </Text>
@@ -90,15 +90,19 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
                 <Calendar size={18} color={Colors.primaryLight} />
               </View>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>DOB</Text>
+                <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>DOB</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
-                  12/10/1994
+                  Sample@example.com
                 </Text>
               </View>
             </View>
           </View>
 
           {/* Face ID & Fingerprint Rows (No Security header as per mockup) */}
+
+          <View style={styles.groupHeaderContainer}>
+            <Text style={[styles.groupHeaderTitle, darkMode && styles.textWhite]}>Security</Text>
+          </View>
           <View style={styles.settingsSection}>
             <View style={styles.settingRow}>
               <View style={styles.rowLeft}>
@@ -371,15 +375,14 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   infoLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: Colors.textPlaceholder,
-    letterSpacing: 0.5,
+    fontSize: 14,
+    fontWeight: '700',
+    color: Colors.textSecondary,
   },
   infoValue: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: Colors.textMuted,
+    fontSize: 12,
+    fontWeight: '500',
+    color: Colors.textPlaceholder,
     marginTop: 2,
   },
   groupHeaderContainer: {

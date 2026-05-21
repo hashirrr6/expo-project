@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, Dimensions, Image } from 'rea
 import { ArrowRight } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
 const { width } = Dimensions.get('window');
 
-interface OnboardingScreenProps {
-  onNext: () => void;
-}
+export default function OnboardingScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-export default function OnboardingScreen({ onNext }: OnboardingScreenProps) {
   return (
     <View style={styles.container}>
       {/* Main Illustration */}
@@ -32,7 +34,8 @@ export default function OnboardingScreen({ onNext }: OnboardingScreenProps) {
       {/* Next Button with Outer Ring */}
       <View style={styles.footer}>
         <View style={styles.nextButtonOuterRing}>
-          <TouchableOpacity style={styles.nextButtonInner} onPress={onNext} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.nextButtonInner} onPress={() => navigation.navigate('Login')} activeOpacity={0.8}>
+
             <ArrowRight color={Colors.white} size={24} />
           </TouchableOpacity>
         </View>

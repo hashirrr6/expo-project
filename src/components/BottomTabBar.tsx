@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Home, CreditCard, Clock, MessageCircle, User } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Colors } from '../constants/theme';
-import { ScreenName, TabName } from '../types';
+import { TabName } from '../types';
+import { RootStackParamList } from '../navigation/AppNavigator';
 
 interface BottomTabBarProps {
   activeTab: TabName;
-  onNavigate: (screen: ScreenName) => void;
   darkMode?: boolean;
 }
 
@@ -14,7 +16,7 @@ interface TabConfig {
   key: TabName;
   label: string;
   icon: React.ComponentType<any>;
-  screen: ScreenName | null;
+  screen: keyof RootStackParamList | null;
 }
 
 // Swapped to match the mockup: Home, Chat, History, Card, Profile
@@ -26,7 +28,9 @@ const TABS: TabConfig[] = [
   { key: 'Profile', label: 'Profile', icon: User, screen: 'Profile' },
 ];
 
-export default function BottomTabBar({ activeTab, onNavigate, darkMode = false }: BottomTabBarProps) {
+export default function BottomTabBar({ activeTab, darkMode = false }: BottomTabBarProps) {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
       {TABS.map((tab) => {
@@ -37,7 +41,7 @@ export default function BottomTabBar({ activeTab, onNavigate, darkMode = false }
           <TouchableOpacity
             key={tab.key}
             style={styles.tab}
-            onPress={() => tab.screen && onNavigate(tab.screen)}
+            onPress={() => tab.screen && navigation.navigate(tab.screen)}
             activeOpacity={0.7}
           >
             {tab.key === 'Profile' ? (

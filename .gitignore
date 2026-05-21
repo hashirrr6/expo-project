@@ -33,3 +33,7 @@ yarn-error.*
 # IDE
 .vscode/
 .idea/
+
+# Native platforms
+/android/
+/ios/

@@ -2,7 +2,10 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'react-native';
 import { ArrowLeft, ChevronRight, Search, MessageSquarePlus, Landmark, CreditCard, Shield, Globe } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
-import { ScreenName, ThreadItem } from '../types';
+import { ThreadItem } from '../types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../navigation/AppNavigator';
 import BottomTabBar from '../components/BottomTabBar';
 
 const STATIC_THREADS: ThreadItem[] = [
@@ -40,10 +43,7 @@ const STATIC_THREADS: ThreadItem[] = [
   },
 ];
 
-interface MessagesScreenProps {
-  onBack: () => void;
-  onNavigate: (screen: ScreenName) => void;
-}
+
 
 type ListItem =
   | { type: 'separator'; label: string; value?: string }
@@ -84,7 +84,8 @@ const getAvatarConfig = (id: string) => {
   }
 };
 
-export default function MessagesScreen({ onBack, onNavigate }: MessagesScreenProps) {
+export default function MessagesScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [searchQuery, setSearchQuery] = useState('');
 
   const getBadgeColor = (status: ThreadItem['statusColor']): string => {
@@ -160,11 +161,11 @@ export default function MessagesScreen({ onBack, onNavigate }: MessagesScreenPro
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity style={styles.iconButton} onPress={onBack}>
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.goBack()}>
           <ArrowLeft size={20} color={Colors.textSecondary} />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Messages</Text>
-        <TouchableOpacity style={styles.iconButton} onPress={() => onNavigate('Profile')}>
+        <TouchableOpacity style={styles.iconButton} onPress={() => navigation.navigate('Profile')}>
           <ChevronRight size={20} color={Colors.textSecondary} />
         </TouchableOpacity>
       </View>
@@ -201,7 +202,7 @@ export default function MessagesScreen({ onBack, onNavigate }: MessagesScreenPro
       </View>
 
       {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Messages" onNavigate={onNavigate} />
+      <BottomTabBar activeTab="Messages" />
     </View>
   );
 }

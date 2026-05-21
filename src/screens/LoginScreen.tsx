@@ -14,9 +14,7 @@ import {
 import { Fingerprint } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 
-interface LoginScreenProps {
-  onLogin: () => void;
-}
+import { useAppStore } from '../store/useAppStore';
 
 /** KOJO brand logo using the loginpage-Logo asset */
 function KojoLogo() {
@@ -32,12 +30,26 @@ function KojoLogo() {
   );
 }
 
-export default function LoginScreen({ onLogin }: LoginScreenProps) {
+export default function LoginScreen() {
+  const login = useAppStore((state) => state.login);
+
   const [phoneNumber, setPhoneNumber] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [keepLoggedIn, setKeepLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    // Save to Zustand global store
+    login({
+      firstName: firstName.trim() || 'Sarah',
+      lastName: lastName.trim() || 'Joe',
+      email: email.trim() || 'Sample@example.com',
+      phoneNumber: phoneNumber.trim() || '(988) 000- 8888',
+      keepLoggedIn,
+    });
+  };
+
 
   return (
     <KeyboardAvoidingView
@@ -118,7 +130,7 @@ export default function LoginScreen({ onLogin }: LoginScreenProps) {
 
         {/* Action Controls */}
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.loginButton} onPress={onLogin} activeOpacity={0.8}>
+          <TouchableOpacity style={styles.loginButton} onPress={handleLogin} activeOpacity={0.8}>
             <Text style={styles.loginButtonText}>Log In</Text>
           </TouchableOpacity>
 

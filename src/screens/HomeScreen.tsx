@@ -3,23 +3,25 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from
 import { Bell, ArrowUpRight, DollarSign, Calendar, MessageSquare, Briefcase, Plus, Clock, Compass } from 'lucide-react-native';
 import Svg, { Path, Circle, Defs, LinearGradient, Stop, Text as SvgText } from 'react-native-svg';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
-import { ScreenName } from '../types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppStore } from '../store/useAppStore';
+import { RootStackParamList } from '../navigation/AppNavigator';
 import BottomTabBar from '../components/BottomTabBar';
 
 const { width } = Dimensions.get('window');
 
-interface HomeScreenProps {
-  onNavigate: (screen: ScreenName) => void;
-}
+export default function HomeScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const user = useAppStore((state) => state.user);
 
-export default function HomeScreen({ onNavigate }: HomeScreenProps) {
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
         {/* Header Greeting Banner */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.greetingTitle}>Hi, Sarah</Text>
+            <Text style={styles.greetingTitle}>Hi, {user.firstName}</Text>
             <Text style={styles.greetingSub}>Your credit in excellent shape!</Text>
           </View>
           <TouchableOpacity style={styles.bellButton} activeOpacity={0.7}>
@@ -92,7 +94,7 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
           <TouchableOpacity
             style={styles.actionItem}
             activeOpacity={0.75}
-            onPress={() => onNavigate('Messages')}
+            onPress={() => navigation.navigate('Messages')}
           >
             <View style={[styles.actionIconHolder, { backgroundColor: Colors.orangeLight }]}>
               <MessageSquare size={22} color={Colors.orange} />
@@ -246,7 +248,7 @@ export default function HomeScreen({ onNavigate }: HomeScreenProps) {
       </TouchableOpacity>
 
       {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Home" onNavigate={onNavigate} />
+      <BottomTabBar activeTab="Home" />
     </View>
   );
 }

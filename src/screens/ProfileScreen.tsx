@@ -2,15 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Switch, Dimensions, Image } from 'react-native';
 import { ChevronLeft, ChevronRight, Mail, Smartphone, Calendar, Fingerprint, Moon, Bell, Smile } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
-import { ScreenName } from '../types';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useAppStore } from '../store/useAppStore';
+import { RootStackParamList } from '../navigation/AppNavigator';
 import BottomTabBar from '../components/BottomTabBar';
 
 const { height } = Dimensions.get('window');
-
-interface ProfileScreenProps {
-  onBack: () => void;
-  onNavigate: (screen: ScreenName) => void;
-}
 
 /** Avatar using the generated 3D image */
 function AvatarImage() {
@@ -25,16 +23,29 @@ function AvatarImage() {
   );
 }
 
-export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps) {
-  const [faceId, setFaceId] = useState(false);
-  const [fingerprint, setFingerprint] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+export default function ProfileScreen() {
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   
-  // Notification states matching the mockup
-  const [pushNotifications, setPushNotifications] = useState(false);
-  const [paymentReminders, setPaymentReminders] = useState(false);
-  const [emailNotifications, setEmailNotifications] = useState(false);
-  const [smsNotifications, setSmsNotifications] = useState(false);
+  // Connect to Zustand global store
+  const {
+    user,
+    faceId,
+    fingerprint,
+    darkMode,
+    pushNotifications,
+    paymentReminders,
+    emailNotifications,
+    smsNotifications,
+    setFaceId,
+    setFingerprint,
+    setDarkMode,
+    setPushNotifications,
+    setPaymentReminders,
+    setEmailNotifications,
+    setSmsNotifications,
+    logout,
+  } = useAppStore();
+
 
   const switchTrackColors = { false: Colors.border, true: Colors.primaryLight };
 
@@ -42,7 +53,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
     <View style={[styles.container, darkMode && styles.containerDark]}>
       {/* Header */}
       <View style={[styles.header, darkMode && styles.headerDark]}>
-        <TouchableOpacity style={styles.headerBtn} onPress={onBack} activeOpacity={0.7}>
+        <TouchableOpacity style={styles.headerBtn} onPress={() => navigation.goBack()} activeOpacity={0.7}>
           <ChevronLeft size={20} color={darkMode ? Colors.white : Colors.textSecondary} />
         </TouchableOpacity>
         <Text style={[styles.headerTitle, darkMode && styles.textWhite]}>Profile</Text>
@@ -56,7 +67,9 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
           {/* Avatar */}
           <View style={styles.avatarWrapper}>
             <AvatarImage />
-            <Text style={[styles.userName, darkMode && styles.textWhite]}>Sarah Joe</Text>
+            <Text style={[styles.userName, darkMode && styles.textWhite]}>
+              {user.firstName} {user.lastName}
+            </Text>
           </View>
 
           {/* Info Rows */}
@@ -68,7 +81,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <View style={styles.infoTextContainer}>
                 <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>Email</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
-                  Sample@example.com
+                  {user.email}
                 </Text>
               </View>
             </View>
@@ -80,7 +93,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <View style={styles.infoTextContainer}>
                 <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>Phone</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
-                  (988) 000- 8888
+                  {user.phoneNumber}
                 </Text>
               </View>
             </View>
@@ -92,7 +105,7 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
               <View style={styles.infoTextContainer}>
                 <Text style={[styles.infoLabel, darkMode && styles.textWhite]}>DOB</Text>
                 <Text style={[styles.infoValue, darkMode && styles.textLightGray]}>
-                  Sample@example.com
+                  {user.dob || '12 Oct 1995'}
                 </Text>
               </View>
             </View>
@@ -255,14 +268,14 @@ export default function ProfileScreen({ onBack, onNavigate }: ProfileScreenProps
           </View>
 
           {/* Logout Button */}
-          <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.8} onPress={onBack}>
+          <TouchableOpacity style={styles.logoutBtn} activeOpacity={0.8} onPress={logout}>
             <Text style={styles.logoutBtnText}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
 
       {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Profile" onNavigate={onNavigate} darkMode={darkMode} />
+      <BottomTabBar activeTab="Profile" darkMode={darkMode} />
     </View>
   );
 }

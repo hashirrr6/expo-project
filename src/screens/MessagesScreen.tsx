@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, FlatList, TextInput, TouchableOpacity } from 'r
 import { ArrowLeft, ChevronRight, Search, MessageSquarePlus, Landmark, CreditCard, Shield, Globe } from 'lucide-react-native';
 import { Colors, Shadows, BorderRadius } from '../constants/theme';
 import { ScreenName, ThreadItem } from '../types';
+import BottomTabBar from '../components/BottomTabBar';
 
 const STATIC_THREADS: ThreadItem[] = [
   {
@@ -198,6 +199,9 @@ export default function MessagesScreen({ onBack, onNavigate }: MessagesScreenPro
           <Text style={styles.startChatText}>Start a new chat</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Bottom Tab Bar */}
+      <BottomTabBar activeTab="Messages" onNavigate={onNavigate} />
     </View>
   );
 }
@@ -272,7 +276,7 @@ const styles = StyleSheet.create({
   listContainer: {
     paddingHorizontal: 20,
     paddingTop: 4,
-    paddingBottom: 90,
+    paddingBottom: 160,
   },
   threadItem: {
     flexDirection: 'row',
@@ -346,7 +350,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     right: 20,
-    bottom: 20,
+    bottom: 90,
   },
   startChatButton: {
     height: 52,

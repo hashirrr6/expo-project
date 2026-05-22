@@ -6,7 +6,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppStore } from '../store/useAppStore';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import BottomTabBar from '../components/BottomTabBar';
 
 const { height } = Dimensions.get('window');
 
@@ -274,8 +273,6 @@ export default function ProfileScreen() {
         </View>
       </ScrollView>
 
-      {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Profile" darkMode={darkMode} />
     </View>
   );
 }

@@ -1,22 +1,16 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { Home, CreditCard, Clock, MessageCircle, User } from 'lucide-react-native';
-import { useNavigation } from '@react-navigation/native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { Colors } from '../constants/theme';
 import { TabName } from '../types';
-import { RootStackParamList } from '../navigation/AppNavigator';
-
-interface BottomTabBarProps {
-  activeTab: TabName;
-  darkMode?: boolean;
-}
+import { useAppStore } from '../store/useAppStore';
 
 interface TabConfig {
   key: TabName;
   label: string;
   icon: React.ComponentType<any>;
-  screen: keyof RootStackParamList | null;
+  screen: string | null;
 }
 
 // Swapped to match the mockup: Home, Chat, History, Card, Profile
@@ -28,20 +22,38 @@ const TABS: TabConfig[] = [
   { key: 'Profile', label: 'Profile', icon: User, screen: 'Profile' },
 ];
 
-export default function BottomTabBar({ activeTab, darkMode = false }: BottomTabBarProps) {
-  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+export default function BottomTabBar({ state, navigation }: BottomTabBarProps) {
+  // Reactively fetch dark mode from Zustand
+  const darkMode = useAppStore((s) => s.darkMode);
+
+  // Find the active route name from the navigation state
+  const activeRouteName = state.routeNames[state.index] as TabName;
 
   return (
     <View style={[styles.container, darkMode && styles.containerDark]}>
       {TABS.map((tab) => {
-        const isActive = tab.key === activeTab;
+        const isActive = tab.key === activeRouteName;
         const IconComponent = tab.icon;
+
+        const handlePress = () => {
+          if (!tab.screen) return;
+          
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: state.routes.find(r => r.name === tab.screen)?.key || '',
+            canPreventDefault: true,
+          });
+
+          if (!isActive && !event.defaultPrevented) {
+            navigation.navigate(tab.screen);
+          }
+        };
 
         return (
           <TouchableOpacity
             key={tab.key}
             style={styles.tab}
-            onPress={() => tab.screen && navigation.navigate(tab.screen)}
+            onPress={handlePress}
             activeOpacity={0.7}
           >
             {tab.key === 'Profile' ? (
@@ -97,6 +109,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     paddingBottom: 10,
+    elevation: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
   },
   containerDark: {
     backgroundColor: Colors.darkSurface,

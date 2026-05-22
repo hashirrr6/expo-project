@@ -6,7 +6,6 @@ import { ThreadItem } from '../types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import BottomTabBar from '../components/BottomTabBar';
 
 const STATIC_THREADS: ThreadItem[] = [
   {
@@ -201,8 +200,6 @@ export default function MessagesScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Messages" />
     </View>
   );
 }

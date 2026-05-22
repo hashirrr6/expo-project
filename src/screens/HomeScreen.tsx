@@ -7,7 +7,6 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useAppStore } from '../store/useAppStore';
 import { RootStackParamList } from '../navigation/AppNavigator';
-import BottomTabBar from '../components/BottomTabBar';
 
 const { width } = Dimensions.get('window');
 
@@ -247,8 +246,6 @@ export default function HomeScreen() {
         <Plus color={Colors.white} size={24} />
       </TouchableOpacity>
 
-      {/* Bottom Tab Bar */}
-      <BottomTabBar activeTab="Home" />
     </View>
   );
 }
